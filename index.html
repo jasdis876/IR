@@ -1,0 +1,1658 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MOHW Jamaica - Contact Investigation IR Form 2025</title>
+    <!-- Load jsPDF from CDN for PDF generation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <style>
+        /* Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        /* Header & Confidentiality Banner */
+        .header {
+            background: linear-gradient(135deg, #0056b3 0%, #006837 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+        
+        .header h2 {
+            font-size: 18px;
+            font-weight: normal;
+            opacity: 0.9;
+        }
+        
+        .confidentiality-banner {
+            background-color: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 15px;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        
+        .confidentiality-banner strong {
+            color: #856404;
+        }
+        
+        /* Step Navigation */
+        .step-navigation {
+            display: flex;
+            justify-content: space-between;
+            background: #e9ecef;
+            padding: 15px;
+            margin: 0 15px;
+            border-radius: 4px;
+        }
+        
+        .step {
+            flex: 1;
+            text-align: center;
+            padding: 10px;
+            position: relative;
+        }
+        
+        .step.active {
+            background: #0056b3;
+            color: white;
+            border-radius: 4px;
+        }
+        
+        .step-number {
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            background: #6c757d;
+            color: white;
+            border-radius: 50%;
+            line-height: 30px;
+            margin-right: 10px;
+        }
+        
+        .step.active .step-number {
+            background: white;
+            color: #0056b3;
+        }
+        
+        /* Form Sections */
+        .form-section {
+            padding: 25px;
+            display: none;
+        }
+        
+        .form-section.active {
+            display: block;
+            animation: fadeIn 0.5s ease-in;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .section-title {
+            color: #0056b3;
+            border-bottom: 2px solid #0056b3;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            font-size: 20px;
+        }
+        
+        /* Form Grid */
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #495057;
+        }
+        
+        .required::after {
+            content: " *";
+            color: #dc3545;
+        }
+        
+        input, select, textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            font-size: 14px;
+            transition: border-color 0.15s ease-in-out;
+        }
+        
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #0056b3;
+            box-shadow: 0 0 0 0.2rem rgba(0, 86, 179, 0.25);
+        }
+        
+        textarea {
+            min-height: 80px;
+            resize: vertical;
+        }
+        
+        /* Checkbox and Radio Groups */
+        .checkbox-group, .radio-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 5px;
+        }
+        
+        .checkbox-item, .radio-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        /* Tables */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+        }
+        
+        .data-table th {
+            background-color: #0056b3;
+            color: white;
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+        }
+        
+        .data-table td {
+            padding: 10px;
+            border: 1px solid #dee2e6;
+        }
+        
+        .data-table tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+        
+        .data-table input, .data-table select {
+            width: 100%;
+            border: none;
+            background: transparent;
+            padding: 5px;
+        }
+        
+        .data-table input:focus, .data-table select:focus {
+            outline: none;
+            box-shadow: none;
+        }
+        
+        /* Button Styles */
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn-primary {
+            background: #0056b3;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #004494;
+        }
+        
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+        
+        .btn-secondary:hover {
+            background: #545b62;
+        }
+        
+        .btn-success {
+            background: #006837;
+            color: white;
+        }
+        
+        .btn-success:hover {
+            background: #00522c;
+        }
+        
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+        
+        .btn-danger:hover {
+            background: #c82333;
+        }
+        
+        .btn-sm {
+            padding: 5px 10px;
+            font-size: 12px;
+        }
+        
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            justify-content: space-between;
+            padding: 20px;
+            background: #f8f9fa;
+            border-top: 1px solid #dee2e6;
+            margin-top: 20px;
+        }
+        
+        /* ID Display */
+        .id-display {
+            background: #e7f1ff;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 15px 0;
+            border-left: 4px solid #0056b3;
+        }
+        
+        .id-display .label {
+            font-weight: 600;
+            color: #0056b3;
+        }
+        
+        .id-display .value {
+            font-family: monospace;
+            font-size: 18px;
+            color: #333;
+            margin-left: 10px;
+        }
+        
+        /* Case Info Bar */
+        .case-info-bar {
+            background: #006837;
+            color: white;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 15px;
+            border-radius: 4px;
+        }
+        
+        .case-info-label {
+            font-weight: 600;
+        }
+        
+        .case-info-value {
+            font-family: monospace;
+            font-size: 20px;
+            font-weight: bold;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .step-navigation {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+        
+        /* Print/PDF Styles */
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            
+            #pdf-content, #pdf-content * {
+                visibility: visible;
+            }
+            
+            #pdf-content {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>Ministry of Health & Wellness, Jamaica</h1>
+            <h2>Contact Investigation Field Guide 2025 - STI Interview Record (IR) Form</h2>
+        </div>
+        
+        <!-- Confidentiality Banner -->
+        <div class="confidentiality-banner">
+            <strong>CONFIDENTIALITY NOTICE:</strong> This app intentionally does NOT store or print real names. 
+            The Contact Investigator must maintain a separate external diary/register linking CASE ID and 
+            Contact IDs to real names for confidentiality. The diary is kept outside of this system and is 
+            not attached to the generated PDF.
+        </div>
+        
+        <!-- Step Navigation -->
+        <div class="step-navigation">
+            <div class="step active" data-step="1">
+                <span class="step-number">1</span> Case Setup
+            </div>
+            <div class="step" data-step="2">
+                <span class="step-number">2</span> Client Details
+            </div>
+            <div class="step" data-step="3">
+                <span class="step-number">3</span> Interview Details
+            </div>
+            <div class="step" data-step="4">
+                <span class="step-number">4</span> Testing & Treatment
+            </div>
+            <div class="step" data-step="5">
+                <span class="step-number">5</span> Contacts
+            </div>
+            <div class="step" data-step="6">
+                <span class="step-number">6</span> Generate PDF
+            </div>
+        </div>
+        
+        <!-- Case Info Display -->
+        <div class="case-info-bar">
+            <div>
+                <span class="case-info-label">Current Case:</span>
+                <span class="case-info-value" id="current-case-id">Not Set</span>
+            </div>
+            <div>
+                <button class="btn btn-secondary btn-sm" onclick="clearForm()">
+                    Clear Form
+                </button>
+            </div>
+        </div>
+        
+        <!-- Step 1: Case Setup -->
+        <div id="step1" class="form-section active">
+            <h2 class="section-title">Step 1: Case Setup</h2>
+            
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="parish" class="required">Parish</label>
+                    <select id="parish" required onchange="generateCaseId()">
+                        <option value="">Select Parish</option>
+                        <option value="KSA">KSA - Kingston and St Andrew</option>
+                        <option value="STT">STT - St Thomas</option>
+                        <option value="POR">POR - Portland</option>
+                        <option value="STM">STM - St Mary</option>
+                        <option value="STA">STA - St Ann</option>
+                        <option value="TRE">TRE - Trelawny</option>
+                        <option value="STJ">STJ - St James</option>
+                        <option value="HAN">HAN - Hanover</option>
+                        <option value="WES">WES - Westmoreland</option>
+                        <option value="STE">STE - St Elizabeth</option>
+                        <option value="MAN">MAN - Manchester</option>
+                        <option value="CLA">CLA - Clarendon</option>
+                        <option value="STC">STC - St Catherine</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="ci-number" class="required">Contact Investigator Number</label>
+                    <input type="text" id="ci-number" placeholder="e.g., SE02" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="ci-name" class="required">Contact Investigator Name</label>
+                    <input type="text" id="ci-name" placeholder="Full Name" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="interview-date" class="required">Interview Date</label>
+                    <input type="date" id="interview-date" required>
+                </div>
+            </div>
+            
+            <div class="id-display">
+                <span class="label">CASE ID (Auto-generated):</span>
+                <span class="value" id="case-id-display">Select parish first</span>
+                <p style="margin-top: 10px; font-size: 12px; color: #666;">
+                    Format: Parish Code + 3-digit sequence (e.g., KNG001, KNG002...)
+                </p>
+            </div>
+            
+            <div class="action-buttons">
+                <button class="btn btn-secondary" onclick="clearForm()">
+                    Clear All
+                </button>
+                <button class="btn btn-primary" onclick="nextStep()">
+                    Next: Client Details →
+                </button>
+            </div>
+        </div>
+        
+        <!-- Step 2: Client Details -->
+        <div id="step2" class="form-section">
+            <h2 class="section-title">Step 2: Client Details</h2>
+            
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="medical-record-number" class="required">Medical Record #</label>
+                    <input type="text" id="medical-record-number" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="sti-code" class="required">STI Code</label>
+                    <select id="sti-code" required>
+                        <option value="">Select STI Code</option>
+                        <option value="A1">A1 - Primary Syphilis</option>
+                        <option value="A2">A2 - Secondary Syphilis</option>
+                        <option value="A3">A3 - Early Latent Syphilis</option>
+                        <option value="A4">A4 - Cardiovascular Syphilis</option>
+                        <option value="A5">A5 - Neurological Syphilis</option>
+                        <option value="A6">A6 - Other Late/Late Latent Syphilis</option>
+                        <option value="A7">A7 - Congenital < 1 year</option>
+                        <option value="A8">A8 - Congenital ≥ 1 year</option>
+                        <option value="B1">B1 - Post-pubertal Gonorrhea</option>
+                        <option value="B2">B2 - Pre-pubertal Gonorrhea</option>
+                        <option value="B3">B3 - Ophthalmia Neonatorum</option>
+                        <option value="C13">C13 - HIV/AIDS</option>
+                        <option value="C14">C14 - Hepatitis B/C</option>
+                        <option value="C15">C15 - HTLV-1</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label class="required">Sex at Birth</label>
+                    <div class="radio-group">
+                        <label class="radio-item">
+                            <input type="radio" name="sex-at-birth" value="M" required> Male (M)
+                        </label>
+                        <label class="radio-item">
+                            <input type="radio" name="sex-at-birth" value="F"> Female (F)
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="date-of-birth">Date of Birth</label>
+                    <input type="date" id="date-of-birth" onchange="calculateAge()">
+                </div>
+                
+                <div class="form-group">
+                    <label for="age">Age</label>
+                    <input type="number" id="age" min="0" max="120">
+                </div>
+                
+                <div class="form-group full-width">
+                    <label for="address" class="required">Address</label>
+                    <textarea id="address" placeholder="Full address or 'UNKNOWN'" required></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="telephone">Telephone #</label>
+                    <input type="tel" id="telephone">
+                </div>
+                
+                <div class="form-group">
+                    <label for="time-at-address">Time at Address</label>
+                    <input type="text" id="time-at-address" placeholder="e.g., 2 years">
+                </div>
+                
+                <div class="form-group">
+                    <label for="time-in-area">Time in Area</label>
+                    <input type="text" id="time-in-area" placeholder="e.g., 5 years">
+                </div>
+                
+                <div class="form-group">
+                    <label for="travel">Travel (sexual encounters during critical period)</label>
+                    <input type="text" id="travel" placeholder="Places visited with sexual encounters">
+                </div>
+                
+                <div class="form-group">
+                    <label for="living-with">Living With</label>
+                    <input type="text" id="living-with" placeholder="Person and relationship">
+                </div>
+                
+                <div class="form-group">
+                    <label for="other-locating-info">Other Locating Information/Work</label>
+                    <input type="text" id="other-locating-info" placeholder="Where else person can be found">
+                </div>
+                
+                <div class="form-group">
+                    <label for="locations-frequented">Locations Frequented</label>
+                    <textarea id="locations-frequented" placeholder="Areas frequently visited"></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="recreational-activities">Recreational Activities</label>
+                    <textarea id="recreational-activities" placeholder="Hobbies, leisure activities, drug use"></textarea>
+                </div>
+            </div>
+            
+            <div class="action-buttons">
+                <button class="btn btn-secondary" onclick="prevStep()">
+                    ← Back: Case Setup
+                </button>
+                <button class="btn btn-primary" onclick="nextStep()">
+                    Next: Interview Details →
+                </button>
+            </div>
+        </div>
+        
+        <!-- Step 3: Interview Details -->
+        <div id="step3" class="form-section">
+            <h2 class="section-title">Step 3: Interview Details</h2>
+            
+            <div class="form-grid">
+                <div class="form-group">
+                    <label class="required">Reason for Interview</label>
+                    <div class="radio-group">
+                        <label class="radio-item">
+                            <input type="radio" name="reason-for-interview" value="Antenatal" required> Antenatal
+                        </label>
+                        <label class="radio-item">
+                            <input type="radio" name="reason-for-interview" value="Reactor"> Reactor
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Key Population</label>
+                    <div class="checkbox-group">
+                        <label class="checkbox-item">
+                            <input type="checkbox" name="key-population" value="MSM"> Men who have sex with men (MSM)
+                        </label>
+                        <label class="checkbox-item">
+                            <input type="checkbox" name="key-population" value="Transgender"> Transgender people
+                        </label>
+                        <label class="checkbox-item">
+                            <input type="checkbox" name="key-population" value="SexWorker"> Sex workers
+                        </label>
+                        <label class="checkbox-item">
+                            <input type="checkbox" name="key-population" value="DrugUser"> People who use drugs
+                        </label>
+                        <label class="checkbox-item">
+                            <input type="checkbox" name="key-population" value="Prisoner"> People in prisons
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="required">Where was the case interviewed?</label>
+                    <div class="radio-group">
+                        <label class="radio-item">
+                            <input type="radio" name="interview-location" value="Clinic" required> Clinic
+                        </label>
+                        <label class="radio-item">
+                            <input type="radio" name="interview-location" value="Hospital"> Hospital
+                        </label>
+                        <label class="radio-item">
+                            <input type="radio" name="interview-location" value="Field"> Field
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="form-group full-width">
+                    <label for="contact-period-start">Contact Period Start Date</label>
+                    <input type="date" id="contact-period-start">
+                </div>
+            </div>
+            
+            <!-- Symptoms Table -->
+            <h3 style="margin: 20px 0 10px 0; color: #0056b3;">Symptoms</h3>
+            <table class="data-table" id="symptoms-table">
+                <thead>
+                    <tr>
+                        <th>Onset Date</th>
+                        <th>Duration (Days)</th>
+                        <th>Description</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="symptoms-tbody">
+                    <tr>
+                        <td><input type="date" class="symptom-onset"></td>
+                        <td><input type="number" class="symptom-duration" placeholder="Days"></td>
+                        <td><input type="text" class="symptom-description" placeholder="Description"></td>
+                        <td>
+                            <button class="btn btn-danger btn-sm" onclick="removeSymptomRow(this)">
+                                Remove
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <button class="btn btn-secondary" onclick="addSymptomRow()" style="margin-top: 10px;">
+                + Add Symptom Row
+            </button>
+            
+            <!-- Next of Kin -->
+            <h3 style="margin: 30px 0 10px 0; color: #0056b3;">Next of Kin / Emergency Contact Information</h3>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="nok-last-name">Last Name</label>
+                    <input type="text" id="nok-last-name">
+                </div>
+                <div class="form-group">
+                    <label for="nok-first-name">First Name</label>
+                    <input type="text" id="nok-first-name">
+                </div>
+                <div class="form-group">
+                    <label for="nok-pet-name">Pet Name/Alias</label>
+                    <input type="text" id="nok-pet-name">
+                </div>
+                <div class="form-group full-width">
+                    <label for="nok-address">Address</label>
+                    <input type="text" id="nok-address">
+                </div>
+                <div class="form-group">
+                    <label for="nok-telephone">Telephone #</label>
+                    <input type="tel" id="nok-telephone">
+                </div>
+            </div>
+            
+            <div class="action-buttons">
+                <button class="btn btn-secondary" onclick="prevStep()">
+                    ← Back: Client Details
+                </button>
+                <button class="btn btn-primary" onclick="nextStep()">
+                    Next: Testing & Treatment →
+                </button>
+            </div>
+        </div>
+        
+        <!-- Step 4: Testing & Treatment -->
+        <div id="step4" class="form-section">
+            <h2 class="section-title">Step 4: Testing & Treatment</h2>
+            
+            <!-- Syphilis Testing -->
+            <div class="form-grid">
+                <div class="form-group">
+                    <label class="required">Tested for Syphilis</label>
+                    <div class="radio-group">
+                        <label class="radio-item">
+                            <input type="radio" name="syphilis-tested" value="Yes" required> Yes
+                        </label>
+                        <label class="radio-item">
+                            <input type="radio" name="syphilis-tested" value="No"> No
+                        </label>
+                        <label class="radio-item">
+                            <input type="radio" name="syphilis-tested" value="Refused"> Refused
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="syphilis-test-type">Test Type & Result</label>
+                    <input type="text" id="syphilis-test-type" placeholder="e.g., SD Bioline, TRUST/VDRL">
+                </div>
+                
+                <div class="form-group">
+                    <label for="syphilis-test-date">Test Date</label>
+                    <input type="date" id="syphilis-test-date">
+                </div>
+            </div>
+            
+            <!-- HIV Testing -->
+            <div class="form-grid">
+                <div class="form-group">
+                    <label class="required">Tested for HIV</label>
+                    <div class="radio-group">
+                        <label class="radio-item">
+                            <input type="radio" name="hiv-tested" value="Yes" required> Yes
+                        </label>
+                        <label class="radio-item">
+                            <input type="radio" name="hiv-tested" value="No"> No
+                        </label>
+                        <label class="radio-item">
+                            <input type="radio" name="hiv-tested" value="Refused"> Refused
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="hiv-test-type">Test Type</label>
+                    <select id="hiv-test-type">
+                        <option value="">Select</option>
+                        <option value="HIVST">HIV Self-Test</option>
+                        <option value="HIV Determine">HIV Determine</option>
+                        <option value="HIV Unigold">HIV Unigold</option>
+                        <option value="ELISA">ELISA</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="hiv-result">Final HIV Test Result</label>
+                    <select id="hiv-result">
+                        <option value="">Select</option>
+                        <option value="Positive">Positive</option>
+                        <option value="Negative">Negative</option>
+                        <option value="Indeterminate">Indeterminate</option>
+                        <option value="Pending">Pending</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="hiv-test-date">Date of Final Result</label>
+                    <input type="date" id="hiv-test-date">
+                </div>
+            </div>
+            
+            <!-- Treatment Information -->
+            <h3 style="margin: 20px 0 10px 0; color: #0056b3;">Treatment (Rx)</h3>
+            <table class="data-table" id="treatment-table">
+                <thead>
+                    <tr>
+                        <th>Medication</th>
+                        <th>Date Started</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="treatment-tbody">
+                    <tr>
+                        <td><input type="text" class="treatment-medication" placeholder="Medication name and dosage"></td>
+                        <td><input type="date" class="treatment-date"></td>
+                        <td>
+                            <button class="btn btn-danger btn-sm" onclick="removeTreatmentRow(this)">
+                                Remove
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <button class="btn btn-secondary" onclick="addTreatmentRow()" style="margin-top: 10px;">
+                + Add Treatment Row
+            </button>
+            
+            <div class="action-buttons">
+                <button class="btn btn-secondary" onclick="prevStep()">
+                    ← Back: Interview Details
+                </button>
+                <button class="btn btn-primary" onclick="nextStep()">
+                    Next: Contacts →
+                </button>
+            </div>
+        </div>
+        
+        <!-- Step 5: Contacts -->
+        <div id="step5" class="form-section">
+            <h2 class="section-title">Step 5: Contacts</h2>
+            
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="number-sex-contacts" class="required">Number of sex contacts named</label>
+                    <input type="number" id="number-sex-contacts" min="0" required onchange="updateContactIds()">
+                </div>
+            </div>
+            
+            <!-- Critical Period Contacts -->
+            <h3 style="margin: 20px 0 10px 0; color: #0056b3;">Critical Period Contacts</h3>
+            <p style="margin-bottom: 10px; color: #666;">
+                Contact IDs will be: <span id="contact-ids-preview" style="font-family: monospace; font-weight: bold;"></span>
+            </p>
+            <table class="data-table" id="critical-contacts-table">
+                <thead>
+                    <tr>
+                        <th>Contact ID</th>
+                        <th>Date of Last Sexual Intercourse</th>
+                        <th>Sex</th>
+                        <th>FR Initiated</th>
+                        <th>Parish to be Worked</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="critical-contacts-tbody"></tbody>
+            </table>
+            <button class="btn btn-secondary" onclick="addCriticalContactRow()" style="margin-top: 10px;">
+                + Add Critical Period Contact
+            </button>
+            
+            <!-- Cluster Suspects -->
+            <h3 style="margin: 30px 0 10px 0; color: #0056b3;">Cluster Suspects</h3>
+            <table class="data-table" id="cluster-suspects-table">
+                <thead>
+                    <tr>
+                        <th>Contact ID</th>
+                        <th>Sex</th>
+                        <th>FR Initiated</th>
+                        <th>Parish to be Worked</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="cluster-suspects-tbody"></tbody>
+            </table>
+            <button class="btn btn-secondary" onclick="addClusterSuspectRow()" style="margin-top: 10px;">
+                + Add Cluster Suspect
+            </button>
+            
+            <!-- Sexual Health Education -->
+            <h3 style="margin: 30px 0 10px 0; color: #0056b3;">Sexual Health Education</h3>
+            <div class="checkbox-group" style="flex-direction: column; align-items: flex-start;">
+                <label class="checkbox-item">
+                    <input type="checkbox" name="sexual-health" value="severity"> Severity and potential complications of the disease
+                </label>
+                <label class="checkbox-item">
+                    <input type="checkbox" name="sexual-health" value="transmission"> Modes of transmission through sexual contact
+                </label>
+                <label class="checkbox-item">
+                    <input type="checkbox" name="sexual-health" value="symptoms"> Recognizing signs and symptoms of the infection
+                </label>
+                <label class="checkbox-item">
+                    <input type="checkbox" name="sexual-health" value="immunity"> Lack of natural immunity against the disease
+                </label>
+                <label class="checkbox-item">
+                    <input type="checkbox" name="sexual-health" value="increased-risk"> Increased risk of acquiring other STIs
+                </label>
+                <label class="checkbox-item">
+                    <input type="checkbox" name="sexual-health" value="condom-use"> Importance of consistent and correct condom use
+                </label>
+                <label class="checkbox-item">
+                    <input type="checkbox" name="sexual-health" value="partner-testing"> Recommendation for all sexual partners to be tested and treated
+                </label>
+            </div>
+            
+            <!-- PrEP -->
+            <div class="form-grid" style="margin-top: 20px;">
+                <div class="form-group">
+                    <label>Is the index case currently taking PrEP?</label>
+                    <div class="radio-group">
+                        <label class="radio-item">
+                            <input type="radio" name="prep-taking" value="Yes"> Yes
+                        </label>
+                        <label class="radio-item">
+                            <input type="radio" name="prep-taking" value="No"> No
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Was the index case referred for PrEP?</label>
+                    <div class="radio-group">
+                        <label class="radio-item">
+                            <input type="radio" name="prep-referred" value="Yes"> Yes
+                        </label>
+                        <label class="radio-item">
+                            <input type="radio" name="prep-referred" value="No"> No
+                        </label>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Disposition -->
+            <h3 style="margin: 30px 0 10px 0; color: #0056b3;">Disposition</h3>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label class="required">Was the case dispositioned?</label>
+                    <div class="radio-group">
+                        <label class="radio-item">
+                            <input type="radio" name="disposition" value="Yes" required> Yes
+                        </label>
+                        <label class="radio-item">
+                            <input type="radio" name="disposition" value="No"> No
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="date-closed">Date Closed (if dispositioned)</label>
+                    <input type="date" id="date-closed">
+                </div>
+                
+                <div class="form-group full-width">
+                    <label for="reason-not-closed">Reason not closed (if not dispositioned)</label>
+                    <textarea id="reason-not-closed" placeholder="Reason for not closing the case"></textarea>
+                </div>
+            </div>
+            
+            <!-- Notes -->
+            <div class="form-group full-width" style="margin-top: 20px;">
+                <label for="notes">Notes</label>
+                <textarea id="notes" placeholder="Additional notes..." rows="4"></textarea>
+            </div>
+            
+            <div class="action-buttons">
+                <button class="btn btn-secondary" onclick="prevStep()">
+                    ← Back: Testing & Treatment
+                </button>
+                <button class="btn btn-primary" onclick="nextStep()">
+                    Review & Generate PDF →
+                </button>
+            </div>
+        </div>
+        
+        <!-- Step 6: Generate PDF -->
+        <div id="step6" class="form-section">
+            <h2 class="section-title">Step 6: Review & Generate PDF</h2>
+            
+            <div class="id-display" style="background: #d4edda; border-left-color: #006837;">
+                <span class="label">CASE ID:</span>
+                <span class="value" id="final-case-id">Not Set</span>
+                <p style="margin-top: 10px; font-size: 12px; color: #666;">
+                    This will be printed on the PDF. Contact names are replaced with Contact IDs for confidentiality.
+                </p>
+            </div>
+            
+            <!-- Summary Preview -->
+            <div style="margin: 20px 0; padding: 20px; background: #f8f9fa; border-radius: 4px;">
+                <h3 style="color: #0056b3; margin-bottom: 15px;">Summary Preview</h3>
+                <div class="form-grid">
+                    <div><strong>Parish:</strong> <span id="summary-parish"></span></div>
+                    <div><strong>CI Number/Name:</strong> <span id="summary-ci"></span></div>
+                    <div><strong>Interview Date:</strong> <span id="summary-interview-date"></span></div>
+                    <div><strong>STI Code:</strong> <span id="summary-sti-code"></span></div>
+                    <div><strong>Critical Period Contacts:</strong> <span id="summary-critical-contacts">0</span></div>
+                    <div><strong>Cluster Suspects:</strong> <span id="summary-cluster-suspects">0</span></div>
+                </div>
+            </div>
+            
+            <!-- PDF Preview Area -->
+            <div id="pdf-preview" style="margin: 20px 0; padding: 20px; border: 2px dashed #dee2e6; border-radius: 4px; text-align: center;">
+                <p style="color: #666;">PDF will be generated with the exact IR form layout</p>
+                <p style="font-size: 12px; color: #999; margin-top: 10px;">
+                    The PDF will match the MOHW IR form from the CI Field Guide 2025
+                </p>
+            </div>
+            
+            <div class="action-buttons">
+                <button class="btn btn-secondary" onclick="prevStep()">
+                    ← Back: Contacts
+                </button>
+                <button class="btn btn-success" onclick="generatePDF()">
+                    Generate & Download PDF
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- PDF Content Template (Hidden) -->
+    <div id="pdf-content" style="display: none; padding: 20mm; font-family: Arial, sans-serif; font-size: 11pt;">
+        <!-- This will be populated and converted to PDF -->
+    </div>
+
+    <script>
+        // Initialize with today's date
+        document.getElementById('interview-date').valueAsDate = new Date();
+        
+        // Load saved sequence numbers from localStorage
+        let parishSequences = JSON.parse(localStorage.getItem('mohw_parish_sequences') || '{}');
+        
+        // Generate Case ID when parish is selected
+        function generateCaseId() {
+            const parishSelect = document.getElementById('parish');
+            const parish = parishSelect.value;
+            
+            if (!parish) {
+                document.getElementById('case-id-display').textContent = 'Select parish first';
+                document.getElementById('current-case-id').textContent = 'Not Set';
+                return;
+            }
+            
+            // Get or initialize sequence for this parish
+            if (!parishSequences[parish]) {
+                parishSequences[parish] = 1;
+            } else {
+                parishSequences[parish]++;
+            }
+            
+            // Save to localStorage
+            localStorage.setItem('mohw_parish_sequences', JSON.stringify(parishSequences));
+            
+            // Format: ParishCode + 3-digit sequence
+            const sequence = parishSequences[parish].toString().padStart(3, '0');
+            const caseId = `${parish}${sequence}`;
+            
+            document.getElementById('case-id-display').textContent = caseId;
+            document.getElementById('current-case-id').textContent = caseId;
+            document.getElementById('final-case-id').textContent = caseId;
+            
+            // Update contact IDs preview
+            updateContactIds();
+        }
+        
+        // Calculate age from date of birth
+        function calculateAge() {
+            const dob = document.getElementById('date-of-birth').value;
+            if (!dob) return;
+            
+            const birthDate = new Date(dob);
+            const today = new Date();
+            let age = today.getFullYear() - birthDate.getFullYear();
+            const monthDiff = today.getMonth() - birthDate.getMonth();
+            
+            if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+                age--;
+            }
+            
+            document.getElementById('age').value = age;
+        }
+        
+        // Step navigation
+        function nextStep() {
+            const currentStep = document.querySelector('.form-section.active');
+            const currentStepNumber = parseInt(currentStep.id.replace('step', ''));
+            
+            if (currentStepNumber < 6) {
+                // Update step navigation
+                document.querySelectorAll('.step').forEach(step => {
+                    step.classList.remove('active');
+                });
+                document.querySelector(`.step[data-step="${currentStepNumber + 1}"]`).classList.add('active');
+                
+                // Hide current step, show next
+                currentStep.classList.remove('active');
+                document.getElementById(`step${currentStepNumber + 1}`).classList.add('active');
+                
+                // Update summary on step 6
+                if (currentStepNumber + 1 === 6) {
+                    updateSummary();
+                }
+                
+                // Scroll to top
+                window.scrollTo(0, 0);
+            }
+        }
+        
+        function prevStep() {
+            const currentStep = document.querySelector('.form-section.active');
+            const currentStepNumber = parseInt(currentStep.id.replace('step', ''));
+            
+            if (currentStepNumber > 1) {
+                // Update step navigation
+                document.querySelectorAll('.step').forEach(step => {
+                    step.classList.remove('active');
+                });
+                document.querySelector(`.step[data-step="${currentStepNumber - 1}"]`).classList.add('active');
+                
+                // Hide current step, show previous
+                currentStep.classList.remove('active');
+                document.getElementById(`step${currentStepNumber - 1}`).classList.add('active');
+                
+                // Scroll to top
+                window.scrollTo(0, 0);
+            }
+        }
+        
+        // Add/remove symptom rows
+        function addSymptomRow() {
+            const tbody = document.getElementById('symptoms-tbody');
+            const newRow = document.createElement('tr');
+            newRow.innerHTML = `
+                <td><input type="date" class="symptom-onset"></td>
+                <td><input type="number" class="symptom-duration" placeholder="Days"></td>
+                <td><input type="text" class="symptom-description" placeholder="Description"></td>
+                <td>
+                    <button class="btn btn-danger btn-sm" onclick="removeSymptomRow(this)">
+                        Remove
+                    </button>
+                </td>
+            `;
+            tbody.appendChild(newRow);
+        }
+        
+        function removeSymptomRow(button) {
+            const row = button.closest('tr');
+            if (document.querySelectorAll('#symptoms-tbody tr').length > 1) {
+                row.remove();
+            }
+        }
+        
+        // Add/remove treatment rows
+        function addTreatmentRow() {
+            const tbody = document.getElementById('treatment-tbody');
+            const newRow = document.createElement('tr');
+            newRow.innerHTML = `
+                <td><input type="text" class="treatment-medication" placeholder="Medication name and dosage"></td>
+                <td><input type="date" class="treatment-date"></td>
+                <td>
+                    <button class="btn btn-danger btn-sm" onclick="removeTreatmentRow(this)">
+                        Remove
+                    </button>
+                </td>
+            `;
+            tbody.appendChild(newRow);
+        }
+        
+        function removeTreatmentRow(button) {
+            const row = button.closest('tr');
+            if (document.querySelectorAll('#treatment-tbody tr').length > 1) {
+                row.remove();
+            }
+        }
+        
+        // Contact management
+        let contactCounter = 1;
+        let clusterCounter = 1;
+        
+        function updateContactIds() {
+            const caseId = document.getElementById('case-id-display').textContent;
+            if (caseId === 'Select parish first') return;
+            
+            const numberContacts = parseInt(document.getElementById('number-sex-contacts').value) || 0;
+            let preview = '';
+            for (let i = 1; i <= numberContacts; i++) {
+                preview += `${caseId}.${i}`;
+                if (i < numberContacts) preview += ', ';
+            }
+            document.getElementById('contact-ids-preview').textContent = preview || 'None';
+            
+            // Update contact IDs in tables
+            updateContactTableIds();
+        }
+        
+        function addCriticalContactRow() {
+            const caseId = document.getElementById('case-id-display').textContent;
+            if (caseId === 'Select parish first') {
+                alert('Please select a parish first to generate Case ID');
+                return;
+            }
+            
+            const tbody = document.getElementById('critical-contacts-tbody');
+            const contactId = `${caseId}.${contactCounter}`;
+            contactCounter++;
+            
+            const newRow = document.createElement('tr');
+            newRow.innerHTML = `
+                <td style="font-family: monospace; font-weight: bold;">${contactId}</td>
+                <td><input type="date" class="contact-date-lsi"></td>
+                <td>
+                    <select class="contact-sex">
+                        <option value="M">M</option>
+                        <option value="F">F</option>
+                    </select>
+                </td>
+                <td>
+                    <select class="contact-fr">
+                        <option value="Y">Y</option>
+                        <option value="N">N</option>
+                    </select>
+                </td>
+                <td><input type="text" class="contact-parish" placeholder="e.g., KSA" maxlength="3" style="text-transform: uppercase;"></td>
+                <td>
+                    <button class="btn btn-danger btn-sm" onclick="removeContactRow(this, 'critical')">
+                        Remove
+                    </button>
+                </td>
+            `;
+            tbody.appendChild(newRow);
+            updateSummary();
+        }
+        
+        function addClusterSuspectRow() {
+            const caseId = document.getElementById('case-id-display').textContent;
+            if (caseId === 'Select parish first') {
+                alert('Please select a parish first to generate Case ID');
+                return;
+            }
+            
+            const tbody = document.getElementById('cluster-suspects-tbody');
+            const contactId = `${caseId}.C${clusterCounter}`;
+            clusterCounter++;
+            
+            const newRow = document.createElement('tr');
+            newRow.innerHTML = `
+                <td style="font-family: monospace; font-weight: bold;">${contactId}</td>
+                <td>
+                    <select class="suspect-sex">
+                        <option value="M">M</option>
+                        <option value="F">F</option>
+                    </select>
+                </td>
+                <td>
+                    <select class="suspect-fr">
+                        <option value="Y">Y</option>
+                        <option value="N">N</option>
+                    </select>
+                </td>
+                <td><input type="text" class="suspect-parish" placeholder="e.g., KSA" maxlength="3" style="text-transform: uppercase;"></td>
+                <td>
+                    <button class="btn btn-danger btn-sm" onclick="removeContactRow(this, 'cluster')">
+                        Remove
+                    </button>
+                </td>
+            `;
+            tbody.appendChild(newRow);
+            updateSummary();
+        }
+        
+        function removeContactRow(button, type) {
+            const row = button.closest('tr');
+            row.remove();
+            updateSummary();
+        }
+        
+        function updateContactTableIds() {
+            const caseId = document.getElementById('case-id-display').textContent;
+            if (caseId === 'Select parish first') return;
+            
+            // Update critical contacts
+            const criticalRows = document.querySelectorAll('#critical-contacts-tbody tr');
+            criticalRows.forEach((row, index) => {
+                const contactIdCell = row.cells[0];
+                contactIdCell.textContent = `${caseId}.${index + 1}`;
+            });
+            
+            // Update cluster suspects
+            const clusterRows = document.querySelectorAll('#cluster-suspects-tbody tr');
+            clusterRows.forEach((row, index) => {
+                const contactIdCell = row.cells[0];
+                contactIdCell.textContent = `${caseId}.C${index + 1}`;
+            });
+        }
+        
+        // Update summary on step 6
+        function updateSummary() {
+            const parishSelect = document.getElementById('parish');
+            const parishText = parishSelect.options[parishSelect.selectedIndex]?.text || 'Not selected';
+            
+            document.getElementById('summary-parish').textContent = parishText;
+            document.getElementById('summary-ci').textContent = 
+                `${document.getElementById('ci-number').value || ''} / ${document.getElementById('ci-name').value || ''}`;
+            document.getElementById('summary-interview-date').textContent = document.getElementById('interview-date').value || '';
+            document.getElementById('summary-sti-code').textContent = 
+                document.getElementById('sti-code').options[document.getElementById('sti-code').selectedIndex]?.text || '';
+            
+            const criticalContacts = document.querySelectorAll('#critical-contacts-tbody tr').length;
+            const clusterSuspects = document.querySelectorAll('#cluster-suspects-tbody tr').length;
+            document.getElementById('summary-critical-contacts').textContent = criticalContacts;
+            document.getElementById('summary-cluster-suspects').textContent = clusterSuspects;
+        }
+        
+        // Clear form
+        function clearForm() {
+            if (!confirm('Are you sure you want to clear all form data? This cannot be undone.')) {
+                return;
+            }
+            
+            // Clear all form inputs
+            document.querySelectorAll('input:not([type="radio"]):not([type="checkbox"])').forEach(input => {
+                input.value = '';
+            });
+            
+            document.querySelectorAll('select').forEach(select => {
+                select.selectedIndex = 0;
+            });
+            
+            document.querySelectorAll('textarea').forEach(textarea => {
+                textarea.value = '';
+            });
+            
+            document.querySelectorAll('input[type="radio"], input[type="checkbox"]').forEach(input => {
+                input.checked = false;
+            });
+            
+            // Clear tables (keep first row)
+            document.querySelectorAll('#symptoms-tbody tr:not(:first-child)').forEach(row => row.remove());
+            document.querySelectorAll('#treatment-tbody tr:not(:first-child)').forEach(row => row.remove());
+            document.querySelectorAll('#critical-contacts-tbody tr').forEach(row => row.remove());
+            document.querySelectorAll('#cluster-suspects-tbody tr').forEach(row => row.remove());
+            
+            // Reset counters
+            contactCounter = 1;
+            clusterCounter = 1;
+            
+            // Reset case ID display
+            document.getElementById('case-id-display').textContent = 'Select parish first';
+            document.getElementById('current-case-id').textContent = 'Not Set';
+            document.getElementById('final-case-id').textContent = 'Not Set';
+            document.getElementById('contact-ids-preview').textContent = '';
+            
+            // Go back to step 1
+            document.querySelectorAll('.form-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            document.querySelectorAll('.step').forEach(step => {
+                step.classList.remove('active');
+            });
+            document.getElementById('step1').classList.add('active');
+            document.querySelector('.step[data-step="1"]').classList.add('active');
+            
+            // Set today's date
+            document.getElementById('interview-date').valueAsDate = new Date();
+        }
+        
+        // Generate PDF
+        async function generatePDF() {
+            const caseId = document.getElementById('case-id-display').textContent;
+            if (caseId === 'Select parish first') {
+                alert('Please complete Step 1 first to generate a Case ID');
+                return;
+            }
+            
+            // Show loading state
+            const generateBtn = document.querySelector('#step6 .btn-success');
+            const originalText = generateBtn.innerHTML;
+            generateBtn.innerHTML = '<span>Generating PDF...</span>';
+            generateBtn.disabled = true;
+            
+            try {
+                // Create PDF content
+                const pdfContent = document.getElementById('pdf-content');
+                pdfContent.innerHTML = createPDFContent();
+                
+                // Use html2canvas and jsPDF
+                const { jsPDF } = window.jspdf;
+                const pdf = new jsPDF('p', 'mm', 'a4');
+                
+                // Capture the content as an image
+                const canvas = await html2canvas(pdfContent, {
+                    scale: 2,
+                    useCORS: true,
+                    logging: false
+                });
+                
+                const imgData = canvas.toDataURL('image/png');
+                const imgWidth = 210; // A4 width in mm
+                const pageHeight = 297; // A4 height in mm
+                const imgHeight = canvas.height * imgWidth / canvas.width;
+                
+                pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
+                
+                // Save the PDF
+                pdf.save(`IR_${caseId}.pdf`);
+                
+                // Show success message
+                alert(`PDF generated successfully!\n\nFile: IR_${caseId}.pdf\n\nRemember: Contact names are replaced with Contact IDs for confidentiality. Maintain external diary linking IDs to names.`);
+                
+            } catch (error) {
+                console.error('PDF generation error:', error);
+                alert('Error generating PDF. Please try again.');
+            } finally {
+                // Restore button state
+                generateBtn.innerHTML = originalText;
+                generateBtn.disabled = false;
+            }
+        }
+        
+        // Create PDF content matching IR form layout
+        function createPDFContent() {
+            const caseId = document.getElementById('case-id-display').textContent;
+            
+            // Get form values
+            const ciNumber = document.getElementById('ci-number').value || '';
+            const ciName = document.getElementById('ci-name').value || '';
+            const parish = document.getElementById('parish').value || '';
+            const interviewDate = document.getElementById('interview-date').value || '';
+            const stiCode = document.getElementById('sti-code').value || '';
+            const medicalRecordNumber = document.getElementById('medical-record-number').value || '';
+            const address = document.getElementById('address').value || '';
+            
+            // Get selected values
+            const sexAtBirth = document.querySelector('input[name="sex-at-birth"]:checked')?.value || '';
+            const reasonForInterview = document.querySelector('input[name="reason-for-interview"]:checked')?.value || '';
+            const interviewLocation = document.querySelector('input[name="interview-location"]:checked')?.value || '';
+            
+            // Build PDF HTML
+            return `
+                <div style="font-family: Arial, sans-serif; font-size: 11pt; line-height: 1.4;">
+                    <!-- Header -->
+                    <div style="text-align: center; margin-bottom: 20px;">
+                        <h1 style="font-size: 16pt; font-weight: bold; text-decoration: underline; margin-bottom: 10px;">
+                            STI CASE INTERVIEW RECORD
+                        </h1>
+                        <div style="text-align: left; margin-bottom: 10px;">
+                            <strong>Contact Investigator Number/Name:</strong> ${ciNumber} / ${ciName}
+                            <span style="margin-left: 40px;"><strong>Parish:</strong> ${parish}</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Interview Details -->
+                    <div style="margin-bottom: 15px;">
+                        <div style="margin-bottom: 5px;">
+                            <strong>Interview date:</strong> ${interviewDate}
+                            <span style="margin-left: 40px;"><strong>STI Code:</strong> ${stiCode}</span>
+                        </div>
+                        <div>
+                            <strong>Medical record #:</strong> ${medicalRecordNumber}
+                            <span style="margin-left: 40px;"><strong>Case #:</strong> ${caseId}</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Client Details (No Name) -->
+                    <div style="margin-bottom: 15px;">
+                        <div style="background: #f0f0f0; padding: 5px; font-weight: bold;">
+                            Client Details - Name Withheld for Confidentiality
+                        </div>
+                        <div style="margin-top: 5px;">
+                            <strong>Sex at Birth:</strong> ${sexAtBirth}
+                            <span style="margin-left: 40px;"><strong>Address:</strong> ${address}</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Locating Information -->
+                    <div style="margin-bottom: 15px;">
+                        <div style="font-weight: bold; margin-bottom: 5px;">Locating Information</div>
+                        <div style="margin-bottom: 3px;">
+                            <strong>Time at address:</strong> ${document.getElementById('time-at-address').value || ''}
+                            <span style="margin-left: 40px;"><strong>Time in area:</strong> ${document.getElementById('time-in-area').value || ''}
+                            <span style="margin-left: 40px;"><strong>Travel:</strong> ${document.getElementById('travel').value || ''}</span>
+                        </div>
+                        <div style="margin-bottom: 3px;">
+                            <strong>Living with:</strong> ${document.getElementById('living-with').value || ''}
+                        </div>
+                        <div style="margin-bottom: 3px;">
+                            <strong>Other locating information/work:</strong> ${document.getElementById('other-locating-info').value || ''}
+                        </div>
+                        <div style="margin-bottom: 3px;">
+                            <strong>Locations frequented:</strong> ${document.getElementById('locations-frequented').value || ''}
+                        </div>
+                        <div>
+                            <strong>Recreational activities:</strong> ${document.getElementById('recreational-activities').value || ''}
+                        </div>
+                    </div>
+                    
+                    <!-- Next of Kin -->
+                    <div style="margin-bottom: 15px;">
+                        <div style="font-weight: bold; margin-bottom: 5px;">Next of Kin/Emergency contact information</div>
+                        <div>
+                            <strong>Last name:</strong> ${document.getElementById('nok-last-name').value || ''}
+                            <span style="margin-left: 40px;"><strong>First name:</strong> ${document.getElementById('nok-first-name').value || ''}
+                            <span style="margin-left: 40px;"><strong>Pet name/Alias:</strong> ${document.getElementById('nok-pet-name').value || ''}</span>
+                        </div>
+                        <div style="margin-top: 3px;">
+                            <strong>Address:</strong> ${document.getElementById('nok-address').value || ''}
+                            <span style="margin-left: 40px;"><strong>Telephone #:</strong> ${document.getElementById('nok-telephone').value || ''}</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Interview Information -->
+                    <div style="margin-bottom: 15px;">
+                        <div style="margin-bottom: 3px;">
+                            <strong>Reason for interview:</strong> ${reasonForInterview === 'Antenatal' ? '☐ Antenatal' : '☐ Reactor'}
+                        </div>
+                        <div style="margin-bottom: 3px;">
+                            <strong>Where was the case interviewed?</strong> ${interviewLocation === 'Clinic' ? '☐ Clinic' : interviewLocation === 'Hospital' ? '☐ Hospital' : '☐ Field'}
+                        </div>
+                        <div style="margin-bottom: 3px;">
+                            <strong>Contact Period Start Date:</strong> ${document.getElementById('contact-period-start').value || ''}
+                        </div>
+                    </div>
+                    
+                    <!-- Symptoms Table -->
+                    <div style="margin-bottom: 15px;">
+                        <div style="font-weight: bold; margin-bottom: 5px;">Symptoms</div>
+                        <table style="width: 100%; border-collapse: collapse; margin-top: 5px;">
+                            <thead>
+                                <tr style="background: #f0f0f0;">
+                                    <th style="border: 1px solid #000; padding: 3px; text-align: left;">Onset Date</th>
+                                    <th style="border: 1px solid #000; padding: 3px; text-align: left;">Duration (Days)</th>
+                                    <th style="border: 1px solid #000; padding: 3px; text-align: left;">Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${Array.from(document.querySelectorAll('#symptoms-tbody tr')).map(row => `
+                                    <tr>
+                                        <td style="border: 1px solid #000; padding: 3px;">${row.querySelector('.symptom-onset').value || ''}</td>
+                                        <td style="border: 1px solid #000; padding: 3px;">${row.querySelector('.symptom-duration').value || ''}</td>
+                                        <td style="border: 1px solid #000; padding: 3px;">${row.querySelector('.symptom-description').value || ''}</td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <!-- Testing Information -->
+                    <div style="margin-bottom: 15px;">
+                        <div style="font-weight: bold; margin-bottom: 5px;">Testing Information</div>
+                        <div style="margin-bottom: 3px;">
+                            <strong>Tested for Syphilis:</strong> ${document.querySelector('input[name="syphilis-tested"]:checked')?.value || ''}
+                        </div>
+                        <div style="margin-bottom: 3px;">
+                            <strong>Tested for HIV:</strong> ${document.querySelector('input[name="hiv-tested"]:checked')?.value || ''}
+                        </div>
+                        <div style="margin-bottom: 3px;">
+                            <strong>Number of sex contacts named:</strong> ${document.getElementById('number-sex-contacts').value || '0'}
+                        </div>
+                    </div>
+                    
+                    <!-- Critical Period Contacts Table -->
+                    <div style="margin-bottom: 20px;">
+                        <div style="font-weight: bold; margin-bottom: 5px;">Critical Period Contacts</div>
+                        <table style="width: 100%; border-collapse: collapse; margin-top: 5px;">
+                            <thead>
+                                <tr style="background: #f0f0f0;">
+                                    <th style="border: 1px solid #000; padding: 3px; text-align: left;">Contact ID</th>
+                                    <th style="border: 1px solid #000; padding: 3px; text-align: left;">Date LSI</th>
+                                    <th style="border: 1px solid #000; padding: 3px; text-align: left;">Sex</th>
+                                    <th style="border: 1px solid #000; padding: 3px; text-align: left;">FR Initiated</th>
+                                    <th style="border: 1px solid #000; padding: 3px; text-align: left;">Parish Worked</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${Array.from(document.querySelectorAll('#critical-contacts-tbody tr')).map(row => `
+                                    <tr>
+                                        <td style="border: 1px solid #000; padding: 3px; font-family: monospace;">${row.cells[0].textContent}</td>
+                                        <td style="border: 1px solid #000; padding: 3px;">${row.querySelector('.contact-date-lsi').value || ''}</td>
+                                        <td style="border: 1px solid #000; padding: 3px;">${row.querySelector('.contact-sex').value || ''}</td>
+                                        <td style="border: 1px solid #000; padding: 3px;">${row.querySelector('.contact-fr').value || ''}</td>
+                                        <td style="border: 1px solid #000; padding: 3px;">${row.querySelector('.contact-parish').value || ''}</td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <!-- Cluster Suspects Table -->
+                    <div style="margin-bottom: 20px;">
+                        <div style="font-weight: bold; margin-bottom: 5px;">Cluster Suspects</div>
+                        <table style="width: 100%; border-collapse: collapse; margin-top: 5px;">
+                            <thead>
+                                <tr style="background: #f0f0f0;">
+                                    <th style="border: 1px solid #000; padding: 3px; text-align: left;">Contact ID</th>
+                                    <th style="border: 1px solid #000; padding: 3px; text-align: left;">Sex</th>
+                                    <th style="border: 1px solid #000; padding: 3px; text-align: left;">FR Initiated</th>
+                                    <th style="border: 1px solid #000; padding: 3px; text-align: left;">Parish Worked</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${Array.from(document.querySelectorAll('#cluster-suspects-tbody tr')).map(row => `
+                                    <tr>
+                                        <td style="border: 1px solid #000; padding: 3px; font-family: monospace;">${row.cells[0].textContent}</td>
+                                        <td style="border: 1px solid #000; padding: 3px;">${row.querySelector('.suspect-sex').value || ''}</td>
+                                        <td style="border: 1px solid #000; padding: 3px;">${row.querySelector('.suspect-fr').value || ''}</td>
+                                        <td style="border: 1px solid #000; padding: 3px;">${row.querySelector('.suspect-parish').value || ''}</td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <!-- Footer -->
+                    <div style="margin-top: 30px; padding-top: 10px; border-top: 1px solid #000; font-size: 9pt; color: #666; text-align: center;">
+                        MOHW Jamaica - Contact Investigation Field Guide 2025 | Generated on ${new Date().toLocaleDateString()} | CASE ID: ${caseId}
+                        <div style="margin-top: 5px;">
+                            Confidential - Names replaced with Contact IDs for privacy protection
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+        
+        // Initialize step navigation click handlers
+        document.querySelectorAll('.step').forEach(step => {
+            step.addEventListener('click', function() {
+                const stepNumber = parseInt(this.getAttribute('data-step'));
+                
+                // Update step navigation
+                document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+                this.classList.add('active');
+                
+                // Show selected step
+                document.querySelectorAll('.form-section').forEach(section => {
+                    section.classList.remove('active');
+                });
+                document.getElementById(`step${stepNumber}`).classList.add('active');
+                
+                // Update summary if going to step 6
+                if (stepNumber === 6) {
+                    updateSummary();
+                }
+                
+                // Scroll to top
+                window.scrollTo(0, 0);
+            });
+        });
+        
+        // Prevent form submission on enter key
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Enter' && event.target.tagName !== 'TEXTAREA') {
+                event.preventDefault();
+            }
+        });
+    </script>
+</body>
+</html>
